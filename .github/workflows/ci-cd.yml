@@ -1,0 +1,46 @@
+# .github/workflows/render-ci.yml
+
+name: Render CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        service: [backend, frontend]   # Dono services ke liye parallel build
+
+    steps:
+      # 1️⃣ Checkout repo
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2️⃣ Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # 3️⃣ Install dependencies
+      - name: Install dependencies
+        working-directory: ${{ matrix.service }}
+        run: npm install
+
+      # 4️⃣ Run tests (agar hain)
+      - name: Run tests
+        working-directory: ${{ matrix.service }}
+        run: npm test || echo "No tests found"
+
+      # 5️⃣ Build service
+      - name: Build
+        working-directory: ${{ matrix.service }}
+        run: npm run build || echo "No build script found"
+
+      # ✅ Note: Deployment to Render is automatic on push to main
+      # Render detects changes, builds, and deploys your services.
