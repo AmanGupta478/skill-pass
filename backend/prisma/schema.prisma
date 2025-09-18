@@ -1,0 +1,153 @@
+generator client {
+  provider = "prisma-client-js"
+  // output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(STUDENT)
+  createdAt DateTime @default(now())
+  profile   Profile?
+
+  // Back-relations
+  createdFlags          Flag[]         @relation("UserFlags")
+  studentVerifications  Verification[] @relation("StudentVerifications")
+  verifierVerifications Verification[] @relation("VerifierVerifications")
+}
+
+model Profile {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  slug      String   @unique
+  bio       String?
+  headline  String?
+  isPublic  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  entries Entry[]
+  metrics MetricDaily[]
+}
+
+model Entry {
+  id          String      @id @default(uuid())
+  title       String
+  type        EntryType
+  description String?
+  startDate   DateTime?
+  endDate     DateTime?
+  tags        String[]
+  status      EntryStatus
+
+  fileName String?
+  fileType String?
+  fileData Bytes?
+
+  profileId String
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  isDeleted Boolean @default(false)
+
+  assets        Asset[]
+  verifications Verification[]
+  flags         Flag[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Asset {
+  id        String    @id @default(cuid())
+  entryId   String
+  entry     Entry     @relation(fields: [entryId], references: [id])
+  kind      AssetKind
+  url       String
+  thumbUrl  String?
+  createdAt DateTime  @default(now())
+}
+
+model Verification {
+  id String @id @default(cuid())
+
+  entryId String
+  entry   Entry @relation(fields: [entryId], references: [id], onDelete: Cascade)
+
+  studentId String
+  student   User @relation("StudentVerifications", fields: [studentId], references: [id])
+
+  verifierId String
+  verifier   User @relation("VerifierVerifications", fields: [verifierId], references: [id])
+
+  entryTitle    String
+  type          EntryType   // 🔥 use the same enum as Entry
+  submittedDate DateTime
+
+  status VerificationStatus @default(PENDING)
+  note   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+model MetricDaily {
+  id             String   @id @default(cuid())
+  profileId      String
+  profile        Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  date           DateTime
+  profileViews   Int      @default(0)
+  entryViewsJson Json?
+}
+
+model Flag {
+  id              String     @id @default(cuid())
+  entryId         String
+  entry           Entry      @relation(fields: [entryId], references: [id])
+  reason          String
+  createdByUserId String
+  createdByUser   User       @relation("UserFlags", fields: [createdByUserId], references: [id])
+  status          FlagStatus @default(OPEN)
+  createdAt       DateTime   @default(now())
+}
+
+enum Role {
+  STUDENT
+  VERIFIER
+  ADMIN
+}
+
+enum EntryType {
+  PROJECT
+  INTERNSHIP
+  CERT
+}
+
+enum EntryStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum AssetKind {
+  IMAGE
+  PDF
+}
+
+enum VerificationStatus {
+  PENDING // Student requested
+  APPROVED // Verifier approved
+  REJECTED // Verifier rejected
+}
+
+enum FlagStatus {
+  OPEN
+  RESOLVED
+}
