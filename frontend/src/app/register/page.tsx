@@ -45,7 +45,6 @@ export default function RegisterPage() {
 
       if (res.ok) {
         toast.success(data.message || "Account created successfully 🎉");
-        // ✅ redirect after short delay so user can see the toast
         setTimeout(() => {
           router.push("/login");
         }, 500);

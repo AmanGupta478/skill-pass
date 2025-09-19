@@ -1,4 +1,4 @@
-//I have this api which get all user `${process.env.NEXT_PUBLIC_API_URL}/v1/admin/get` 
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -30,7 +30,7 @@ type CurrentUser = {
 };
 
 type AdminUser = {
-  id: string;            // keep the id for delete/edit
+  id: string;    
   name: string;
   email: string;
   role: string;
@@ -92,7 +92,6 @@ export default function AdminDashboard() {
         const data = await res.json();
         const rawUsers = data?.users || data;
 
-        // Map API -> AdminUser, keep id but don’t display it
         const mapped: AdminUser[] = rawUsers.map((u: any) => ({
           id: u.id || u._id,     // adapt to your backend
           name: u.name,
@@ -100,7 +99,6 @@ export default function AdminDashboard() {
           role: u.role,
         }));
 
-        // Remove admins
         const nonAdmins = mapped.filter(
           (u) => u.role?.toLowerCase() !== "admin"
         );
@@ -190,7 +188,7 @@ export default function AdminDashboard() {
         throw new Error(data?.message || "Failed to update user");
       }
 
-      const updatedUser = await res.json(); // expect backend returns updated user
+      const updatedUser = await res.json();
 
       // Update local state
       setUsers((prev) =>

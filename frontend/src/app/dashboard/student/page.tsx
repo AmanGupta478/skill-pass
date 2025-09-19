@@ -11,7 +11,6 @@ import { Badge } from "@/components/ui/badge";
 import FlagButton from "./components/FlagButton";
 import CreateEntryDialog from "./components/CreateEntryDialog";
 import EditEntryDialog from "./components/EditEntryDialog";
-// import VerificationInbox from "./components/VerificationInbox";
 import { Pencil, Trash2, Plus, Flag } from "lucide-react";
 import { toast } from "sonner";
 
@@ -36,16 +35,16 @@ export default function DashboardPage() {
 
   const [user, setUser] = useState<User | null>(null);
 
-  // 🔹 Fetch logged-in user + entries
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/auth/me`, {
           method: "GET",
-          credentials: "include", // important if using cookie-based auth
+          credentials: "include", 
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // if using JWT
+            Authorization: `Bearer ${localStorage.getItem("token")}`, 
           },
         });
 
@@ -65,7 +64,6 @@ export default function DashboardPage() {
       }
     };
 
-    // ✅ also fetch entries when dashboard loads
     const fetchEntries = async () => {
       try {
         const url = `${process.env.NEXT_PUBLIC_API_URL}/v1/entri/getentries`;
@@ -77,7 +75,6 @@ export default function DashboardPage() {
         });
 
         if (!res.ok) {
-          // Try to capture backend error response
           const text = await res.text();
           console.error("❌ Backend returned error:", {
             status: res.status,
@@ -91,7 +88,6 @@ export default function DashboardPage() {
         console.log("✅ Entries fetched successfully:", data);
         setEntries(data);
       } catch (err: any) {
-        // Catch network/CORS/other errors
         console.error("❌ fetchEntries network/parse error:", err);
         toast.error("Failed to load entries.");
       }
@@ -113,8 +109,6 @@ export default function DashboardPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          // Add auth token if needed
-          // "Authorization": `Bearer ${localStorage.getItem("token")}`
         },
         body: JSON.stringify({ entryId, reason }),
       });
@@ -178,7 +172,6 @@ export default function DashboardPage() {
         throw new Error(data?.message || "Failed to delete entry");
       }
 
-      // ✅ Remove from local state after successful API call
       setEntries((prev) => prev.filter((entry) => entry.id !== id));
       toast.success("Entry deleted successfully!");
     } catch (err: any) {

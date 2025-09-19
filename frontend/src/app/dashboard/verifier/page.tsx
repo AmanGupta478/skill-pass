@@ -114,8 +114,7 @@ export default function VerifDashboard() {
         throw new Error(`${res.status} ${res.statusText}: ${data.message || "Unknown error"}`);
       }
 
-      setEntries(data || []); // 👈 update state here
-      return data;            // optional return if you want to use it later
+      setEntries(data || []); 
     } catch (err) {
       console.error("Queue fetch error:", err);
       toast.error("Failed to load verification queue.");

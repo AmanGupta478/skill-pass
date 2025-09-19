@@ -1,4 +1,4 @@
-// routes/entries.routes.js
+
 import express from "express";
 import {
   createEntry,

@@ -5,11 +5,6 @@ import { requireRole } from "../middlewares/roleMiddleware.js";
 
 const router = express.Router();
 
-/**
- * All routes below:
- *  - Require a valid JWT in cookies (`isAuthenticated`)
- *  - Require the user to have ADMIN role
- */
 router.use(isAuthenticated, requireRole(["ADMIN"]));
 
 // GET all users

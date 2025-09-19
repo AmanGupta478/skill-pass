@@ -1,11 +1,6 @@
-// controllers/flagController.js
+
 import prisma from "../prismaClient.js";
 
-/**
- * @desc Create a new flag for an entry
- * @route POST /v1/flags
- * @access Authenticated (Student / Verifier / Admin)
- */
 export const createFlag = async (req, res) => {
   try {
     const { entryId, reason } = req.body;
@@ -35,11 +30,6 @@ export const createFlag = async (req, res) => {
   }
 };
 
-/**
- * @desc List all flags (admin only)
- * @route GET /v1/flags
- * @access Admin
- */
 export const listFlags = async (req, res) => {
   try {
     const flags = await prisma.flag.findMany({
@@ -59,11 +49,6 @@ export const listFlags = async (req, res) => {
   }
 };
 
-/**
- * @desc Resolve a flag (set status = RESOLVED)
- * @route PATCH /v1/flags/:id/resolve
- * @access Admin
- */
 export const resolveFlag = async (req, res) => {
   try {
     const { id } = req.params;

@@ -1,4 +1,4 @@
-// app/dashboard/components/EditEntryDialog.tsx
+
 "use client";
 
 import { useState } from "react";

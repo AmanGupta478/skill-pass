@@ -33,8 +33,8 @@ export default function VerificationInbox() {
 
     const getVerifierName = (verifier: any) => {
         if (!verifier) return "Unknown";
-        if (typeof verifier === "string") return verifier;       // already a name
-        if (typeof verifier === "object" && "name" in verifier) return verifier.name; // object form
+        if (typeof verifier === "string") return verifier;
+        if (typeof verifier === "object" && "name" in verifier) return verifier.name;
         return "Unknown";
     };
     // Fetch user
@@ -61,7 +61,6 @@ export default function VerificationInbox() {
         fetchUser();
     }, []);
 
-    // ✅ Fetch verification inbox
     useEffect(() => {
         const fetchRequests = async () => {
             try {

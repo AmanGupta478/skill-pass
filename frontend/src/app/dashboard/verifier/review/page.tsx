@@ -55,7 +55,7 @@ export default function ReviewPage() {
             if (!res.ok) throw new Error(data.message || "Failed");
 
             toast.success(`Verification ${status.toLowerCase()}`);
-            router.push("/dashboard/verifier"); // 👈 back to queue
+            router.push("/dashboard/verifier");
         } catch (err: any) {
             toast.error(err.message || "Review failed");
         }

@@ -102,7 +102,7 @@ export default function MyEntriesPage() {
         `${process.env.NEXT_PUBLIC_API_URL}/v1/entri/delelaentries/${id}`,
         {
           method: "DELETE",
-          credentials: "include", // ensure cookies/JWT are sent
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
@@ -115,7 +115,7 @@ export default function MyEntriesPage() {
         throw new Error(data?.message || "Failed to delete entry");
       }
 
-      // ✅ Remove from local state after successful API call
+
       setEntries((prev) => prev.filter((entry) => entry.id !== id));
       toast.success("Entry deleted successfully!");
     } catch (err: any) {

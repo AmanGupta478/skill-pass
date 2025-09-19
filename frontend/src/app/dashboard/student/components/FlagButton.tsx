@@ -30,9 +30,8 @@ export default function FlagButton({ entryId }: FlagButtonProps) {
 
         setLoading(true);
         try {
-            // Get token from localStorage (or cookies if you use cookies)
             const token = localStorage.getItem("token");
-            console.log("JWT Token:", token); // Debug: check if token exists
+            console.log("JWT Token:", token);
 
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/flag/createflag`, {
                 method: "POST",
@@ -42,10 +41,10 @@ export default function FlagButton({ entryId }: FlagButtonProps) {
             });
 
 
-            console.log("Response status:", res.status); // Debug: check status code
+            // console.log("Response status:", res.status);
 
             const data = await res.json();
-            console.log("Response body:", data); // Debug: check server response
+            // console.log("Response body:", data);
 
             if (!res.ok) throw new Error(data.message || "Failed to report entry");
 

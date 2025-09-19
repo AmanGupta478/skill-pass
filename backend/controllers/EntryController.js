@@ -1,4 +1,4 @@
-// controllers/EntryController.js
+
 import prisma  from "../prismaClient.js";
 
 

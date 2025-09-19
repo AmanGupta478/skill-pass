@@ -1,7 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-// import { Request, Response } from "express";
 import prisma from "../prismaClient.js";
 import { Role } from "@prisma/client";
 

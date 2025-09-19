@@ -1,7 +1,6 @@
 
 import prisma  from "../prismaClient.js";
 
-// --- Controller ----------------------------------------------
 export const getAll = async (req, res) => {
     try {
         const users = await prisma.user.findMany({
@@ -24,7 +23,7 @@ export const getById = async (req, res) => {
 
     try {
         const user = await prisma.user.findUnique({
-            where: { id }, // UUID as string
+            where: { id },
             select: {
                 id: true,
                 name: true,
@@ -50,7 +49,6 @@ export const getById = async (req, res) => {
     }
 }
 
-// Update user (name, email, role, password)
 export const update = async (req, res) => {
     const { id } = req.params;
     const { name, email, role, password } = req.body;
@@ -75,7 +73,7 @@ export const update = async (req, res) => {
             },
         });
 
-        return res.json(updatedUser); // 👈 send the updated user
+        return res.json(updatedUser);
     } catch (error) {
         console.error(error);
         if (error.code === "P2025") {
@@ -86,8 +84,6 @@ export const update = async (req, res) => {
 };
 
 
-
-// Change another user's role (Admin only)
 export const changeRole = async (req, res) => {
     try {
         const { id } = req.params;

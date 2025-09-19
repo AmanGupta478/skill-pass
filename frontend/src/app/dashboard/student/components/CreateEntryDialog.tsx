@@ -45,7 +45,6 @@ export default function CreateEntryDialog({
 
     const onSubmit = async (data: FormValues, status: "DRAFT" | "PUBLISHED") => {
         try {
-            // Ensure type present (extra safety)
             const type = (data.type || "PROJECT").toString();
 
             let res;
@@ -93,7 +92,7 @@ export default function CreateEntryDialog({
             reset();
             setOpen(false);
 
-            return entry; // ✅ return created entry
+            return entry; //
         } catch (err: unknown) {
             if (err instanceof Error) {
                 console.error("Create entry failed:", err);
@@ -102,7 +101,7 @@ export default function CreateEntryDialog({
                 console.error("Unknown create entry error:", err);
                 toast.error("Create entry failed");
             }
-            return null; // ✅ always return something
+            return null; //
         }
     };
 
@@ -110,19 +109,17 @@ export default function CreateEntryDialog({
         try {
             toast.info("Creating entry and sending verification request...");
 
-            // 1️⃣ Create entry first
             const entry = await onSubmit(formData, "DRAFT");
             if (!entry || !entry.id) {
                 throw new Error("Entry creation failed, cannot send verification request");
             }
 
-            // 2️⃣ Send verification request with real verifierId
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/varifire/request`, {
                 method: "POST",
                 credentials: "include",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    verifierId: "b2a44ff8-2938-4cc1-a0fb-a6622802054d", // ✅ your real verifier ID
+                    verifierId: "b2a44ff8-2938-4cc1-a0fb-a6622802054d", // 
                     entryId: entry.id,
                     entryTitle: entry.title,
                     type: entry.type,
