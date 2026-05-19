@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  output: 'standalone', // Essential for small Docker images
   eslint: {
     // Build ke time linting errors ignore karega
     ignoreDuringBuilds: true,

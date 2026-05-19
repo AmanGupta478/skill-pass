@@ -1,10 +1,10 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { toast } from "sonner";
 
-export default function ReviewPage() {
+function ReviewPageContent() {
     const params = useSearchParams();
     const router = useRouter();
     const id = params.get("id");
@@ -138,3 +138,12 @@ export default function ReviewPage() {
         </div>
     );
 }
+
+export default function ReviewPage() {
+    return (
+        <Suspense fallback={<div className="p-10 text-gray-600">Loading verification review...</div>}>
+            <ReviewPageContent />
+        </Suspense>
+    );
+}
+

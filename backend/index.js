@@ -30,6 +30,11 @@ app.use("/v1/entri", entrieRoute);
 app.use("/v1/varifire", verifireRoute);
 app.use("/v1/flag", flagRoute);
 
+// Health check endpoint
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "UP" });
+});
+
 
 const PORT =process.env.PORT || 4000;
 

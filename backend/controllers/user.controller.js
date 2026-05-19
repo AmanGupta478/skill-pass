@@ -2,7 +2,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import prisma from "../prismaClient.js";
-import { Role } from "@prisma/client";
+import pkg from "@prisma/client";
+const { Role } = pkg;
 
 dotenv.config();
 
