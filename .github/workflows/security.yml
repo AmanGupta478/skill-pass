@@ -1,0 +1,91 @@
+name: Security Checks
+
+on:
+    workflow_call:
+
+permissions:
+    contents: read
+
+jobs:
+    frontend-dependency-scan:
+        name: Frontend Dependency Scan
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                node-version: '22'
+                cache: npm
+                cache-dependency-path: frontend/package-lock.json
+            
+            - name: perform dependency and security scan on frontend
+              working-directory: ./frontend
+              run: npm install
+
+            - name: run npm audit for frontend
+              working-directory: ./frontend
+              run: npm audit --audit-level=high
+
+    backend-dependency-scan:
+        name: Backend Dependency Scan
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                node-version: '22'
+                cache: npm
+                cache-dependency-path: backend/package-lock.json
+            
+            - name: perform dependency and security scan on backend
+              working-directory: ./backend
+              run: npm install
+
+            - name: run npm audit for backend
+              working-directory: ./backend
+              run: npm audit --audit-level=high
+        
+    secret-scan:
+        name: Secret Scan
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                fetch-depth: 0
+
+            - name: Check for secrets
+              uses: gitleaks/gitleaks-action@v2
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    filesystem-scan:
+        name: Filesystem Scan
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+            
+            - name: Scan files with Trivy
+              uses: aquasecurity/trivy-action@v0.36.0
+              with:
+                scan-type: 'fs'
+                scan-ref: '.'
+                severity: 'HIGH,CRITICAL'
+                exit-code: 1
+                ignore-unfixed: true
+              

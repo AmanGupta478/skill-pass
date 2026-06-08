@@ -19,10 +19,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  tests:
-    name: Run Tests
+  validation:
+    name: Validation
     uses: ./.github/workflows/tests.yml
 
-    
+  security:
+    name: Run Security Checks
+    needs: validation
+    uses: ./.github/workflows/security.yml
 
   
