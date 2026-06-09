@@ -1,5 +1,5 @@
 # Stage 1: Build & Prune
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 
 # Install OpenSSL & compatibility libs for Prisma client generation
 RUN apk add --no-cache openssl libc6-compat
@@ -20,7 +20,7 @@ RUN npm prune --omit=dev
 
 
 # Stage 2: Runtime
-FROM node:20-alpine AS runtime
+FROM node:22-alpine AS runtime
 
 # Install tini for PID 1 signal handling, openssl and libc6-compat for Prisma runtime
 RUN apk add --no-cache tini openssl libc6-compat
