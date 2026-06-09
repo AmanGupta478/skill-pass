@@ -32,3 +32,8 @@ jobs:
     name: Build Docker Images
     needs: security
     uses: ./.github/workflows/Build.yml
+
+  publish:
+    name: Publish Docker Images
+    needs: build
+    uses: ./.github/workflows/publish.yml
