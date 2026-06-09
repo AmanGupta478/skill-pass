@@ -28,4 +28,7 @@ jobs:
     needs: validation
     uses: ./.github/workflows/security.yml
 
-  
+  build:
+    name: Build Docker Images
+    needs: security
+    uses: ./.github/workflows/Build.yml
