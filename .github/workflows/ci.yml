@@ -36,4 +36,6 @@ jobs:
   publish:
     name: Publish Docker Images
     needs: build
+    if: github.event_name == 'push'
     uses: ./.github/workflows/publish.yml
+    secrets: inherit
